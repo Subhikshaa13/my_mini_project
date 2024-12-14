@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Price Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 1.2rem;
+            margin-right: 10px;
+        }
+
+        input[type="date"] {
+            padding: 10px;
+            font-size: 1rem;
+            width: 60%;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .error-message {
+            color: #d9534f;
+            font-weight: bold;
+        }
+
+        .result {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .result h2 {
+            font-size: 1.8rem;
+            color: #333;
+        }
+
+        .result p {
+            font-size: 1.2rem;
+            color: #130e0e;
+        }
+
+        .investment-action {
+            font-size: 1.8rem;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;  /* This makes the background box fit the content */
+            margin-top: 20px;
+        }
+        
+
+        .buy {
+            
+            background-color: #28a745;
+            
+            color: white;
+        }
+
+        .sell {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .hold {
+            background-color: #ffc107;
+            color: black;
+        }
+
+        .chart-container {
+            margin-top: 30px;
+        }
+
+        footer {
+            margin-top: 40px;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Bitcoin Price Prediction</h1>
+
+        <!-- Form for Date Input -->
+        <form method="POST">
+            <label for="date">Select a date:</label>
+            <input type="date" id="date" name="date" required>
+            <button type="submit">Submit</button>
+        </form>
+
+        <!-- Error Message -->
+        {% if error_message %}
+            <p class="error-message">{{ error_message }}</p>
+        {% endif %}
+
+        <!-- Display Results -->
+        {% if predicted_price_inr %}
+            <div class="result">
+                <h2>Predicted Price for {{ selected_date.strftime('%d/%m/%Y') }}: ₹{{ "{:,.2f}".format(predicted_price_inr) }}</h2>
+                <p>{{ recommendation }}</p>
+                
+                <!-- Display Buy/Sell/Hold Action with Styling -->
+                <div class="investment-action {{ action|lower }}">
+                    {{ action }}
+                </div>
+            </div>
+            <div class="chart-container">
+                <div>{{ chart_html|safe }}</div>
+            </div>
+        {% endif %}
+
+        <footer>
+            <p>Powered by Flask & Plotly | Bitcoin Price Prediction App</p>
+        </footer>
+    </div>
+
+</body>
+</html>
