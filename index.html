@@ -6,7 +6,7 @@
     <title>Bitcoin Price Prediction</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+         font-family: Arial, sans-serif;
             background-color: #f4f7fc;
             color: #333;
             display: flex;
@@ -14,6 +14,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            
         }
 
         .container {
@@ -22,13 +23,20 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             padding: 40px;
             width: 100%;
-            max-width: 600px;
+            max-width: 10000px;
             text-align: center;
+            box-sizing: border-box; /* Ensures padding is included in the width */
+            min-height: 450px; /* Ensures enough space for content */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         h1 {
             font-size: 2.5rem;
-            margin-bottom: 20px;
+            margin: 0; 
+            padding-bottom: 20px; 
         }
 
         form {
@@ -74,12 +82,12 @@
         }
 
         .result h2 {
-            font-size: 1.8rem;
-            color: #333;
+            font-size: 1.6rem;
+            color: #04030c;
         }
 
         .result p {
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             color: #130e0e;
         }
 
@@ -112,6 +120,11 @@
 
         .chart-container {
             margin-top: 30px;
+            width: 100%;
+            background-color: #fafafa;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         footer {
@@ -125,6 +138,7 @@
 <body>
 
     <div class="container">
+        
         <h1>Bitcoin Price Prediction</h1>
 
         <!-- Form for Date Input -->
@@ -142,7 +156,9 @@
         <!-- Display Results -->
         {% if predicted_price_inr %}
             <div class="result">
-                <h2>Predicted Price for {{ selected_date.strftime('%d/%m/%Y') }}: ₹{{ "{:,.2f}".format(predicted_price_inr) }}</h2>
+                <h2>Predicted Price for {{ selected_date.strftime('%d/%m/%Y') }}: 
+                    <hr>
+                    ₹{{ "{:,.2f}".format(predicted_price_inr) }}</h2>
                 <p>{{ recommendation }}</p>
                 
                 <!-- Display Buy/Sell/Hold Action with Styling -->
@@ -155,10 +171,9 @@
             </div>
         {% endif %}
 
-        <footer>
-            <p>Powered by Flask & Plotly | Bitcoin Price Prediction App</p>
-        </footer>
+        
     </div>
 
 </body>
 </html>
+
