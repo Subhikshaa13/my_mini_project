@@ -65,20 +65,14 @@ def get_predictions(start_date):
     
     return prediction_dates, predicted_prices
 
-# Analyze predicted trend to recommend investment action (Buy, Sell, Hold)
-def analyze_investment_action(predicted_prices):
+# Analyze predicted trend to recommend investment
+def analyze_investment_recommendation(predicted_prices):
     if predicted_prices[-1] > predicted_prices[0]:
-        if predicted_prices[-1] - predicted_prices[0] > 5000:  # Adjust threshold as needed
-            return "Buy", "The price is predicted to increase significantly. It might be a good time to buy."
-        else:
-            return "Hold", "The price is predicted to rise slowly. Consider holding."
+        return "The trend is positive. It might be wise to invest.", "BUY"
     elif predicted_prices[-1] < predicted_prices[0]:
-        if predicted_prices[0] - predicted_prices[-1] > 5000:  # Adjust threshold as needed
-            return "Sell", "The price is predicted to drop significantly. It might be a good time to sell."
-        else:
-            return "Hold", "The price is predicted to decrease slowly. Consider holding."
+        return "The trend seems negative. It would be better to sell your holdings.", "SELL"
     else:
-        return "Hold", "The price is expected to stay stable. It's best to hold."
+        return "The price is stable. Holding might be a good option.", "HOLD"
 
 # Function to create a Plotly graph
 def generate_interactive_chart(dates, prices):
@@ -87,15 +81,24 @@ def generate_interactive_chart(dates, prices):
     fig.add_trace(go.Scatter(x=dates, y=prices, mode='lines+markers', name='Predicted Price',
                              hovertemplate='<b>Date</b>: %{x}<br><b>Price</b>: ₹%{y}<extra></extra>'))
 
+    # Update layout for light theme with gridlines
     fig.update_layout(
         title="Bitcoin Price Prediction (Next 7 Days)",
         xaxis_title="Date",
         yaxis_title="Price (INR)",
         hovermode="x unified",  # Display all info in a single hover
-        template="plotly",  # White theme for the graph
-        plot_bgcolor='white',  # Set the background to white
-        paper_bgcolor='white',  # Set the paper background to white
-        font=dict(color='black')  # Set font color to black for better contrast
+        template="plotly_white",  # Light theme for the graph
+        xaxis=dict(
+            showgrid=True,  # Show gridlines on the x-axis
+            gridcolor='rgba(0, 0, 0, 0.1)'  # Lighter grid color
+        ),
+        yaxis=dict(
+            showgrid=True,  # Show gridlines on the y-axis
+            gridcolor='rgba(0, 0, 0, 0.1)'  # Lighter grid color
+        ),
+        plot_bgcolor='rgba(255, 255, 255, 1)',  # White background for the plot
+        paper_bgcolor='rgba(255, 255, 255, 1)',  # White background for the entire paper
+        showlegend=True
     )
 
     # Convert the figure to HTML for embedding
@@ -107,7 +110,7 @@ def index():
     predicted_price_inr = None
     selected_date = None
     chart_html = None
-    action = None  # To hold the investment action (Buy/Sell/Hold)
+    action = ""
 
     if request.method == 'POST':
         # Get the date input from the user
@@ -125,8 +128,8 @@ def index():
             # Assume the last predicted price as the predicted price for the selected date
             predicted_price_inr = predicted_prices[-1]
 
-            # Get investment recommendation and action based on the trend
-            action, recommendation = analyze_investment_action(predicted_prices)
+            # Get investment recommendation based on the trend
+            recommendation, action = analyze_investment_recommendation(predicted_prices)
 
             # Generate the interactive chart
             chart_html = generate_interactive_chart(prediction_dates, predicted_prices)
@@ -138,8 +141,8 @@ def index():
                                predicted_price_inr=predicted_price_inr,
                                selected_date=selected_date,
                                recommendation=recommendation,
-                               action=action,  # Add investment action (Buy/Sell/Hold)
-                               chart_html=chart_html)
+                               chart_html=chart_html,
+                               action=action)
     
     return render_template('index.html')
 
